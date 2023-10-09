@@ -8,10 +8,10 @@ libraries.show()
 # We can also import python libraries from other python packages. But the catch is
 # it should contain __init__.py file inside it.
 
-from lib import py_library
+from pylib import py_library
 
 # To include specific functions
-from lib.py_library import hello
+from pylib.py_library import hello
 
 py_library.hi()
 hello()
