@@ -17,7 +17,7 @@ def increment(n):
 incremented_num = increment(5)
 print(incremented_num)
 # Annotations
-# The above method is without annotations. Python is dynamically typed so we don't need to provide
+# The above method is without annotations. Python is dynamically typed so, we don't need to provide
 # types explicitly. With annotations, we can do that.
 
 
