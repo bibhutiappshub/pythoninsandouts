@@ -1,3 +1,5 @@
+from timeit import default_timer as timer
+
 # Simple declaration
 my_str = "Hello"
 str_with_quote = 'Hi'
@@ -46,3 +48,25 @@ if not int_val:
     print("True")
 
 print(type(bool_val) == bool)
+
+my_sentence = "Hello Hi Bye"
+words = my_sentence.split(" ")
+print(words)
+converted_str = " ".join(words)
+print(converted_str)
+# Performance comparison of joining a string.
+my_rep_str = ['a'] * 1000000
+joined_str1 = ""
+
+begin = timer()
+# bad approach for joining string because it will create a new string every time as string is immutable.
+for i in my_rep_str:
+    joined_str1 += i
+end = timer()
+print(f"Elapsed Time: {end-begin}") #Elapsed Time: 8.059475417000158
+
+start = timer()
+# more advanaced/cleaner/optmized approach
+joined_str2 = ''.join(my_rep_str)
+stop = timer()
+print(f"Elapsed Time: {stop-start}") #Elapsed Time: 0.003793625000071188
