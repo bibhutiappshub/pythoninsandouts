@@ -1,5 +1,6 @@
 import json
 from json import JSONEncoder
+from json import JSONDecoder
 
 person_dict = {"name": "Matt",
                "age": 35,
@@ -28,7 +29,7 @@ print(persondictobj)
 
 def encode_user(obj):
     if isinstance(obj, User):
-        return {"name": obj.name, "age": obj.age}
+        return {"name": obj.name, "age": obj.age, obj.__class__.__name__: True}
     else:
         raise TypeError('Object of type User is not JSON Serializable')
 
@@ -42,9 +43,21 @@ class UserEncoder(JSONEncoder):
     # Alternate way to make a class JSON serializable
     def default(self, obj):
         if isinstance(obj, User):
-            return {"name": obj.name, "age": obj.age}
+            return {"name": obj.name, "age": obj.age, obj.__class__.__name__: True}
 
         return JSONEncoder.default(self, obj)
+
+
+class UserDecoder(JSONDecoder):
+    # Alternate way to make a class JSON serializable
+    def __init__(self):
+        JSONDecoder.__init__(self, object_hook=UserDecoder.from_dict)
+
+    @staticmethod
+    def from_dict(dictobj):
+        if User.__name__ in dictobj:
+            return User(name=dictobj["name"], age=dictobj["age"])
+        return dictobj
 
 user1 = User('Matt', 37)
 user2 = User('Nathan', 38)
@@ -56,3 +69,10 @@ userJson3 = UserEncoder().encode(user3)
 print("User JSON1 : ", userJson1)
 print("User JSON2 : ", userJson2)
 print("User JSON3 : ", userJson3)
+
+# Decode the object back
+userobj1 = json.loads(userJson1)
+userobj2 = json.loads(userJson2, cls=UserDecoder)
+print(userobj1) # This will be a dictionary rather than User object
+print(userobj2.name) # This will be a dictionary rather than User object
+print(type(userobj2)) # This will be a dictionary rather than User object
